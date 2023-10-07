@@ -3,7 +3,14 @@ const pool = require('../config/conexao')
 const transacao = {
   listarTransacoes: async (req, res) => {
     const id = req.usuario_id
+    // Pega o parâmetro de filtro da query
+    const categoriasFiltradas = req.query.filtro || []; 
 
+    // parte da consulta SQL para filtrar por categorias
+    let categoriaFilter = '';
+    if (categoriasFiltradas.length > 0) {
+      categoriaFilter = ' AND c.descricao IN ($1)'; // $1 será substituído pelas categorias filtradas
+    }
     const query = `
       select
         t.id,
@@ -19,8 +26,8 @@ const transacao = {
       join
         categorias c on t.categoria_id = c.id
       where
-        t.usuario_id = $1`
-    const values = [id]
+        t.usuario_id = $2${categoriaFilter}`; // Inclui a cláusula de filtro se houver categorias filtradas
+    const values = [categoriasFiltradas, id]; // Passa as categorias filtradas e o ID do usuário
 
     try {
       const { rows } = await pool.query(query, values)
