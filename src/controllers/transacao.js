@@ -3,7 +3,12 @@ const { pool } = require('../config/conexao')
 const transacao = {
   listarTransacoes: async (req, res) => {
     const id = req.usuario_id
+    const categoriasFiltradas = req.query.filtro || []
 
+    let categoriaFilter = ''
+    if (categoriasFiltradas.length > 0) {
+      categoriaFilter = ' and c.descricao in ($1)'
+    }
     const query = `
       select
         t.id,
@@ -19,8 +24,8 @@ const transacao = {
       join
         categorias c on t.categoria_id = c.id
       where
-        t.usuario_id = $1`
-    const values = [id]
+        t.usuario_id = $2${categoriaFilter}`
+    const values = [categoriasFiltradas, id]
 
     try {
       const { rows } = await pool.query(query, values)
