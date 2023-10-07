@@ -1,9 +1,8 @@
 const express = require('express')
 const app = express()
 const rotas = require('./routes/rotas')
-require('dotenv').config()
 
-const port = process.env.porta || 3000
+const port = 3000
 
 app.use(express.json())
 

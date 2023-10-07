@@ -1,4 +1,4 @@
-const pool = require('../config/conexao')
+const { pool } = require('../config/conexao')
 
 const transacao = {
   listarTransacoes: async (req, res) => {
@@ -239,8 +239,8 @@ const transacao = {
       const { rows: somaSaida } = await pool.query(saida, values)
 
       const extrato = {
-        entrada: somaEntrada[0].entrada || 0,
-        saida: somaSaida[0].saida || 0,
+        entrada: Number(somaEntrada[0].entrada) || 0,
+        saida: Number(somaSaida[0].saida) || 0,
       }
 
       return res.status(200).json(extrato)

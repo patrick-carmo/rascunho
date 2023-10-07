@@ -1,4 +1,4 @@
-const pool = require('../config/conexao')
+const { pool } = require('../config/conexao')
 
 const listarCategorias = async (req, res) => {
   const query = 'select * from categorias'
