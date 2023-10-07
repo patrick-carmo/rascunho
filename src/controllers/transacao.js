@@ -1,4 +1,4 @@
-const pool = require('../config/conexao')
+const { pool } = require('../config/conexao')
 
 const transacao = {
   listarTransacoes: async (req, res) => {

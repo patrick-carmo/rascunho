@@ -1,4 +1,4 @@
-const pool = require('../config/conexao')
+const { pool, chave } = require('../config/conexao')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -72,7 +72,7 @@ const usuario = {
         return res.status(400).json({ mensagem: 'Usuário e/ou senha inválido(s).' })
       }
 
-      const token = jwt.sign({ id: usuario.rows[0].id }, process.env.token, {
+      const token = jwt.sign({ id: usuario.rows[0].id }, chave, {
         expiresIn: '1d',
       })
 
@@ -81,6 +81,7 @@ const usuario = {
 
       return res.status(200).json({ usuario: exibirUsuario, token })
     } catch (error) {
+      console.error(error)
       return res.status(500).json({ mensagem: error.message })
     }
   },

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const pool = require('../config/conexao')
+const { pool, chave } = require('../config/conexao')
 
 const verificarToken = async (req, res, next) => {
   const { authorization } = req.headers
@@ -13,7 +13,7 @@ const verificarToken = async (req, res, next) => {
   try {
     const token = authorization.split(' ')[1].trim()
 
-    const { id } = jwt.verify(token, process.env.token)
+    const { id } = jwt.verify(token, chave)
   
     const usuario = await pool.query('select * from usuarios where id = $1', [id])
 
